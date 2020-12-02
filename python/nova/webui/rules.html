@@ -1,0 +1,156 @@
+
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<title>Nova : Game Rules</title>
+</head>
+
+<body>
+	<center>
+	<h1>Nova : Game Rules</h1>
+	</center>
+
+	Your minions are like swarming, slavish ants. They are slavish in their obedience, and relentless in their quest for resources
+	and territory. For millenia, they have grown, evolved, and consumed until their home planet is a teeming hive of restless biology.
+	They have long known that their only option for further expansion is the colonization of other stars, a goal achievable only 
+	through the development of hyperspace technology. At last, one race has developed such a capability and they gleefully prepare for
+	galactic domination. But their joy soon turns to shock and alarm as spies spread the secret throughough the galaxy. The race is on!
+	<p>
+	Hyperspace travel is far too dangerous for a race of selfish, fragile beings. But the hive species have no fear or doubt; at once, they
+	hurl themselves headlong into the unknown.
+	<p>
+	The objective of Nova is to spread out from your home star and take control of as many stars as possible. You face long odds
+	and wily enemies. Choose your battles carefully...
+
+	<a name="contents"><h2>Contents</h2></a>
+
+	<ul>
+	<li><a href="#summary"><strong>Summary</strong></a></li>
+	<li><a href="#starmap"><strong>Star Map</strong></a></li>
+	<li><a href="#movement"><strong>Fleet Movement</strong></a></li>
+	<li><a href="#battles"><strong>Battles</strong></a></li>
+	<li><a href="#production"><strong>Resources, Cash, and Factories</strong></a></li>
+	<li><a href="#probes_bombs"><strong>Probes and Nova Bombs</strong></a></li>
+	<li><a href="#notifications"><strong>Notifications</strong></a></li>
+	<li><a href="#deployment"><strong>Deployment Orders</strong></a></li>
+	<li><a href="#programming"><strong>Programming Nova</strong></a></li>
+	</ul>
+
+	<a name="summary"><h2>Summary</h2></a>
+
+	The rules of Nova are designed to be as simple as possible. In short:
+	
+	<ul>
+	<li>Each player starts with one <a href="#starmap">star</a> and some ships</li>
+	<li>Ships are <a href="#movement">dispatched</a> to <a href="#battles">attack</a> and gain control of other stars</li>
+	<li>Stars <a href="#production">generate cash</a> which can be spent to build factories</li>
+	<li><a href="#production">Factories</a> generate new ships once per turn</li>
+	<li><a href="#probes_bombs">Probes</a> can be sent to spy on enemy stars</li>
+	<li><a href="#probes_bombs">Nova Bombs</a> are an expensive but effective doomsday weapon</li>
+	<li><a href="#notifications">E-mail notifications</a> and <a href="#deployment">deployment orders</a> help reduce your workload</li>
+	<li>Some matches allow players to write and use their own <a href="#programming">AI programs</a></li>
+	<li>You are encouraged to negotiate with, ally with, and deceive other players</li>
+	<li>The player with the most stars at the end of the match, wins</li>
+	</ul>
+
+	A match can last anywhere from a few hours to 3 weeks. In long matches, the ships move very slowly; it can take all day to get from
+	one star to another. In shorter matches, the ships move proportionately faster. A slow game allows a lot of time for strategy,
+	negotiation with other players, and it is possible to play quite effectively spending only a few minutes making moves several times 
+	during the day. In other words, it doesn't require a long block of continuous time to play; it goes very well with work or school.
+	
+	<a name="starmap"><h2>Star Map</h2></a>
+	
+	Study the star map carefully to consider your strategy. The distribution of the stars will play a large part in the decisions you will
+	make about how to dispatch fleets and how to make peace and war on other species.
+	<p>
+	Every star has resources which you can use to develop your technology or build new assets. <i>All</i> the stars are inhabited
+	at the beginning of the match, you will have to capture each one from its native inhabitants.
+		
+	<a name="movement"><h2>Fleet Movement</h2></a>
+	
+	Fighting fleets can be dispatched to any star that is within range. A star is within range if the distance to that star is less than
+	your Range, or if it can be reached by a path involving only stars that you control. Fleets which are sent on long-distance trips
+	always take the shortest path to their destination; the path is re-computed each time they arrive at a waypoint.
+	<p>
+	You can also configure <a href="#deployment">Deployment Orders</a> which automatically route ships around your stars.
+	
+	<a name="battles"><h2>Battles</h2></a>
+	
+	When your fleet arrives at a star that you don't control, a battle ensues. As you would expect from a battle between mindless,
+	selfless warrior drones, no quarter is asked or given. The defender generally has the advantage; this advantage can be increased
+	or nullified by decisive numerical superiority or inferiority. Specifically:
+
+	<p>	
+	<table border="1">
+	<tr><th>Advantage</th><th>Attacker odds</th><th>Defender odds</th></tr>
+	<tr><td>Attacker has 50%+ more ships</td><td>50%</td><td>50%</td></tr>
+	<tr><td>Defender has 50%+ more ships</td><td>30%</td><td>70%</td></tr>
+	<tr><td>Otherwise</td><td>40%</td><td>60%</td></tr>
+	</table>
+	</p>
+	The battle proceeds in rounds. In each round, either the defender or the attacker loses a ship according to the odds table above.
+	The odds are then re-computed, and the battle continues until either the attacker or the defender runs out of ships.
+	<p>
+	When one player captures a star from another, all players are informed about the transfer of ownership. However, only the participating
+	players know how many ships were involved and how many were lost on each side. Other players are not informed when a star is successfully
+	defended.
+	
+	<a name="production"><h2>Resources, Cash, and Factories</h2></a>
+
+	At the end of each turn, the resources of each star are harvested and converted into cash currency, which you can spend on:
+	<ul>
+	<li>New factories</li>
+	<li>Additional Range and Speed</li>
+	<li><a href="#probes_bombs">Probes and Nova Bombs</a></li>
+	<li><a href="#probes_bombs">Probe shields and Nova Bomb shields</a></li>
+	</ul>
+	The new cash from each of your stars is immediately deposited into an untouchable account; cash cannot be lost or stolen.
+	<p>
+	The galactic economy is generating the new cash as each factory simultaneously produces one new ship on its star.	
+	<p>
+	When a star is captured, ownership of all the resources and improvements (factories, shields, etc) on that star are immediately 
+	transferred to the new owner. When resource harvest and ship production occurs, the cash and ships go to the current owner 
+	of the star.
+
+	<a name="probes_bombs"><h2>Probes and Nova Bombs</h2></a>
+
+	Probes and Nova Bombs add more strategic options to the game.
+	<p>
+	Each player is kept informed about major events going on in the game through the Nova user interface. However, not much information
+	is provided about the movements of other players. You can dispatch Probes to other stars in order to find out more specifically
+	what other players are doing. If the destination star does not have a Probe shield, you will be told all about what is going
+	on at that star; the other player will not know that the star has been probed. However, if the star has a Probe sheild,
+	you receive no information and the other player is informed that a probe was blocked at the star (but not who sent the Probe).
+	<p>
+	When a star is captured in battle, the attacker takes posession of the resources and factories on the star. A Nova Bomb is
+	a doomsday device that destroys the target star entirely, unless it has a Nova Bomb shield.
+	<p>
+	Probes and Nova Bombs travel at twice the speed of ships.
+	
+	<a name="notifications"><h2>Notifications</h2></a>
+
+	It should not be necessary to frequently check the Nova web site to find out if significant game events have occurred.
+	If you request it, Nova can send you e-mail when important events like battles occur. Please submit your suggestions on
+	how Nova can proactively keep you updated regarding game events.
+	
+	<a name="deployment"><h2>Deployment Orders</h2></a>
+
+	Deployment orders can be used to automatically route ships between stars. One deployment order can be specified for
+	each star that you own. When ships arrive at the star or are produced by factories, they are immediately dispatched to
+	the destination star specified by the deployment order. The order also specifies how many
+	ships should be left on the star as a garrison to defend it.
+	
+	<a name="programming"><h2>Programming Nova</h2></a>
+
+	Nova has an <a href="http://xmlrpc.org/">XML-RPC</a> API that you can use write Artificial Intelligence (AI) code. The following
+	functions are available:
+	
+	<dl>
+	<dt>getSnapshot
+	<dd>Describes the stars, fleets, players, and recent game events which have occurred.
+	<dt>dispatchFleet, dispatchProbe, dispatchNovaBomb
+	<dd>Sends a fleet, probe, or Nova Bomb
+	</dl>
+	
+	Not all matches permit the use of AI.
+
+</body>

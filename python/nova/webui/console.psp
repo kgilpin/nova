@@ -1,0 +1,468 @@
+<%@ page imports = "sys,os,time,nova.webui.format:formatValueForPage,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.	 Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use braces to indent the sourcefile that this template will produce --%><%
+
+from nova.api import query
+from mx import DateTime
+
+if not self.login(): return
+
+debug = self.request().fields().has_key('debug')
+
+self.setAppletDimensions()
+
+mkPlayer = self.player()
+
+snapshot = query.getSnapshot(mkPlayer, since = DateTime.now() - DateTime.DateTimeDelta(1))
+game = snapshot.game()
+client = snapshot.clientPlayer()
+
+gameStarted = game.startTime() < DateTime.now()
+gameOver = game.endTime() < DateTime.now()
+
+stars = snapshot.stars()
+fleets = snapshot.fleets()
+
+pendingShips = snapshot.getPendingShipsByStar()
+
+rowClasses = [ "rowEven", "rowOdd" ]
+
+newWindowArgs = "'toolbar=no,width=%s,height=%s,status=no,scrollbars=no,resizable=yes,location=no,menubar=no,screenX=100,screenY=100,left=100,top=100'"
+%>
+<%@ page formatter="formatValueForPage" %>
+<html>
+<head>
+	<title>Nova: <%= client.name() %></title>
+	<meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+
+	<script type="text/JavaScript" src="expand.js"></script>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+</head>
+<body>
+
+<psp:method name="setAppletDimensions">
+	"""
+	Sets the appletWidth and appletHeight cookies if they are passed in as arguments
+	"""
+	width = self.request().field('appletWidth', None)
+	if width is not None:
+		self.response().setCookie('appletWidth', width, expires='NEVER')
+	height = self.request().field('appletHeight', None)
+	if height is not None:
+		self.response().setCookie('appletHeight', height, expires='NEVER')
+</psp:method>
+<psp:method name="appletDimensions">
+	"""
+	Return a tuple containing the width and height of the web applet
+	"""
+	return ( int(self.request().field('appletWidth', self.request().cookie('appletWidth', 500))), 
+			int(self.request().field('appletHeight', self.request().cookie('appletHeight', 500))) )
+</psp:method>
+
+<script>
+function zoomToStar(starName) 
+{
+	document.mapApplet.zoomToStar(starName);
+}
+   
+function dispatch(origin, destination) {
+	var url = "/nova/dispatch.psp";
+	if ( origin != null )
+	{
+		url = url + '?origin=' + escape(origin);
+	}
+	if ( destination != null )
+	{
+		if ( origin == null )
+			url = url + '?';
+		else
+			url = url + '&';
+		url = url + 'destination=' + escape(destination);
+	}
+	window.open(url,'Dispatch',<%= newWindowArgs % ( 400, 300 ) %>);
+   }
+</script>
+
+<center>
+  <table border=0 cellpadding=0 cellspacing=2 width=100%>
+	<tr>
+	  <td align=center colspan=3><a href="http://www.ironworks.cc/nova/">
+		<h2>Nova / <%= client.name() %></h2>
+		</a></td>
+	</tr>
+	<tr>
+	  <td colspan=3 align="center">
+<font class="pn-title"><%@ include file="printMessageOrError.psp" %></font>
+	  </td>
+	</tr>
+<%
+if not gameStarted: {
+%>
+	<tr>
+	  <td colspan=3 align="center"><font class="pn-title"><b>Game <%= game.id() %> 
+		has not started yet!</b><br>
+		Game starts in <%= game.startTime() - DateTime.now() %></font><br>
+	  </td>
+	</tr>
+<%
+}
+else: {
+	timeRemaining = game.endTime() - DateTime.now()
+	nextProduction = game.nextProductionTime()
+	if gameOver: {
+		timeRemaining = 'The game is over!'
+	}
+%>
+	<tr>
+	  <td colspan=3 align="center"> <font class="pn-title"> Current Time: <%= DateTime.now() %> 
+		<br>
+		Time Remaining in Game: <%= timeRemaining %><br>
+<%
+if not gameOver and nextProduction: {
+%>	
+		Next Production in: <%= nextProduction - DateTime.now() %>
+<%
+}
+%>		
+		 </font> </td>
+	</tr>
+<%
+}	
+%>	
+	<tr>
+	  <td width="250" valign=top> 
+		<table width="100%" border=0 cellpadding=5 cellspacing=0>
+		  <tr> 
+		  	<td class="consoleHeading">
+			  <span style="cursor:pointer; cursor:hand" onClick="expandItem('actions')">Actions</span>
+			</td>
+		  </tr>
+		  <tr> 
+			<td align="left" class="consoleItemList" id="actions"> 
+<%
+if not gameOver: {
+%>			
+			  <a href="javascript:dispatch(null, null);">Dispatch</a>&nbsp;<a title="Help" href="rules.html#movement">?</a><br/>
+			  <a href="javascript:window.open('/nova/purchase.psp','Dispatch',<%= newWindowArgs % ( 650, 200 ) %>);" target="_command">Purchase</a>&nbsp;<a title="Help" href="rules.html#production">?</a><br/>
+<%
+}
+%>			  
+			  <a href="notifications.psp">Notification Settings</a>&nbsp;<a title="Help" href="rules.html#notifications">?</a><br/>
+			  <a href="deployment.psp">Deployment Orders</a>&nbsp;<a title="Help" href="rules.html#deployment">?</a><br/>
+			  <a href="http://ironworks.cc/novabb/">Bulletin Board</a><br/>
+			  <a href="LogoutAction.py">Log Out</a><br/>
+			  <a href="/nova/">Nova Home Page</a><br/>
+		    </td>
+		  </tr>
+		  <%
+myStars = snapshot.getOwnedLiveStars()
+numStars = len(myStars)
+wealth, garrisonShips, fleetShips, numFactories = 0, 0, 0, 0
+numFactories = reduce(lambda a, b: a + b, [star.ownerInfo().numFactories() for star in myStars ], 0)
+numGarrisonShips = reduce(lambda a, b: a + b, [star.ownerInfo().numShips() for star in myStars ], 0)
+numFleetShips = reduce(lambda a, b: a + b, [fleet.numShips() for fleet in fleets if fleet.unitType() == 'Ship' and not fleet.isPending(game) ], 0)
+numPendingShips = reduce(lambda a, b: a + b, [ numShips for numShips in pendingShips.values() ], 0)
+wealth = reduce(lambda a, b: a + b, [star.ownerInfo().wealth() for star in myStars ], 0)
+%>
+		  <tr> 
+		  	<td class="consoleHeading">
+			  <span style="cursor:pointer; cursor:hand" onClick="expandItem('status')">Status</span>
+			</td>
+		  </tr>
+		  <tr> 
+			<td class="consoleItemList" id="status"> 
+			  <table border=0 cellpadding=2 cellspacing=0 width="100%">
+				<tr class="rowEven"> 
+				  <td>Cash</td>
+				  <td><b>$<%= client.ownerInfo().cash() %></b></td>
+				</tr>
+				<tr class="rowOdd"> 
+				  <td>Range<br>
+					(Parsecs)</td>
+				  <td><b><%= "%.2f" % client.ownerInfo().range() %></b></td>
+				</tr>
+				<tr class="rowEven"> 
+				  <td>Speed<br>
+					( Parsecs per hour )</td>
+				  <td><b><%= "%.2f" % client.ownerInfo().speed() %></b></td>
+				</tr>
+				<tr class="rowOdd"> 
+				  <td>Wealth</td>
+				  <td><b><%= wealth %></b></td>
+				</tr>
+				<tr class="rowEven"> 
+				  <td>Factories</td>
+				  <td><b><%= numFactories %></b></td>
+				</tr>
+				<tr class="rowOdd"> 
+				  <td>Ships</td>
+				  <td><b><%= numGarrisonShips + numPendingShips + numFleetShips %></b><i>(<%= numFleetShips + numPendingShips %> 
+					in transit)</i></td>
+				</tr>
+				<tr class="rowEven"> 
+				  <td>Stars</td>
+				  <td><b><%= numStars %></b></td>
+				</tr>
+			  </table>
+			</td>
+		  </tr>
+		  <%
+	if not gameStarted: {
+%>
+		  <tr> 
+		  	<td class="consoleHeading">
+			  <span style="cursor:pointer; cursor:hand" onClick="expandItem('startingOrders')">Starting Orders</span>
+			</td>
+		  </tr>
+		  <tr> 
+			<td class="consoleItemList" id="startingOrders"> 
+			  <form action="StartingOrders.py" method=POST>
+				<input type=hidden name=action value=startingorders>
+				<table width="100%" border=0 cellpadding=2 cellspacing=0>
+				  <tr> 
+					<td><b>To</b></td>
+					<td><b>Ships</b></td>
+				  </tr>
+				  <tr>
+					<td>Provrb</td>
+					<td>
+					  <input name=StartingOrderProvrb size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td>Caldor</td>
+					<td>
+					  <input name=StartingOrderCaldor size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td>Mozila</td>
+					<td>
+					  <input name=StartingOrderMozila size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td>Wolf</td>
+					<td>
+					  <input name=StartingOrderWolf size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td>Yfour</td>
+					<td>
+					  <input name=StartingOrderYfour size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td>Staff</td>
+					<td>
+					  <input name=StartingOrderStaff size=4 maxlength=4>
+					</td>
+				  </tr>
+				  <tr>
+					<td><b>Total Ships</b></td>
+					<td></td>
+				  </tr>
+				  <tr>
+					<td>&nbsp;</td>
+					<td>
+					  <input type=submit value=Update>
+					</td>
+				  </tr>
+				</table>
+				<br>
+			  </form>
+			</td>
+		  </tr>
+		  <% 
+}
+else: {
+%>
+		  <tr> 
+		  	<td class="consoleHeading">
+			  <span style="cursor:pointer; cursor:hand" onClick="expandItem('fleets')">Fleets</span>
+			</td>
+		  </tr>
+		  <tr> 
+			<td class="consoleItemList" id="fleets"> 
+			  <table width="100%" border=0 cellpadding=2 cellspacing=0>
+				<tr class="rowEven"> 
+				  <td width="56%"><b>To</b></td>
+				  <td align="center" width="18%"><b>Time Left</b></td>
+				  <td align="center" width="26%"><b>Ships</b></td>
+				</tr>
+				<%
+
+rowCounter = 0
+for fleet in fleets: {
+	rowCounter += 1
+	if fleet.unitType() == 'Ship': { numShips = str(fleet.numShips()) }
+	elif fleet.unitType() == 'Probe': { numShips = 'Probe' }
+	elif fleet.unitType() == 'NovaBomb': { numShips = 'Nova Bomb' }
+	timeRemaining = fleet.arrivalTime() - DateTime.now()
+	notLastLeg = fleet.ownerInfo().finalDestination() is not None and fleet.ownerInfo().finalDestination() is not fleet.destination()
+	if timeRemaining < 0: {
+		timeRemaining = 'Arrived'
+	}
+	canAbort = fleet.isPending(game) or notLastLeg
+%>
+				<tr class="<%= rowClasses[rowCounter % 2] %>"> 
+				  <td width="56%"> 
+                    <% if not notLastLeg: { %>
+                    <a href="#applet" onclick="zoomToStar('<%= fleet.destination().name() %>')"><%= fleet.destination().name() %></a> 
+                    <% } else: { %>
+                    <a href="#applet" onclick="zoomToStar('<%= fleet.ownerInfo().finalDestination().name() %>')"><%= fleet.ownerInfo().finalDestination().name() %></a><br>
+                    ( via <a href="#applet" onclick="zoomToStar('<%= fleet.destination().name() %>')"><%= fleet.destination().name() %></a> )
+<% } %>				  
+				  </td>
+				  <td align="center" width="18%"> <%= timeRemaining %> 
+                    <% if canAbort: { %>
+                    <br>
+					<a href="AbortAction.py?_action_abort=true&departureId=<%= fleet.id() %>">Abort</a> 
+<% } %>
+				  </td>
+				  <td align="center" width="26%"><%= numShips %></td>
+				</tr>
+				<%
+}
+%>
+			  </table>
+			</td>
+		  </tr>
+		  <%
+}
+%>
+		</table>
+		<br>
+		<%
+appletWidth = self.appletDimensions()[0]
+appletHeight = self.appletDimensions()[1]
+%>
+	  </td>
+	  <td width="10">
+		&nbsp;
+	  </td>
+	  <td valign="top" align="left"> 
+		<div style="height:15px">&nbsp;</div>
+		<table border="1" cellspacing="0" cellpadding="0" class="novaApplet">
+		  <tr>
+			<td width="400" height="400"> 
+			<a name="applet">
+			<APPLET MAYSCRIPT CODE="nova.applet.NovaApplet" ARCHIVE="/nova-lib/nova-applet.jar" WIDTH="<%= appletWidth %>" HEIGHT="<%= appletHeight %>" VSPACE=10 HSPACE=10 NAME="mapApplet">
+				<% if debug: { %>
+				<param name="debug" value="true" />
+				<% } %>
+				<param name="range" value="<%= client.ownerInfo().range() %>" />
+				<param name="player" value="<%= client.name() %>" />
+				<param name="playercolor" value="000204051" />
+				<%				
+i = 1
+for star in stars: {
+%>
+				<param name="star<%= i %>" value="<%= star.x() %>|<%= star.y() %>|<%= star.name() %>|<%= star.owner().name() %>|<%= star.isDead() %>|<% if star.ownerInfo(): { %><%= star.ownerInfo().wealth() %>|<%= "%d" % ( star.ownerInfo().numShips() - pendingShips[star] ) %>|<%= star.ownerInfo().numFactories() %>|<%= star.ownerInfo().hasNovaShield() %>|<%= star.ownerInfo().hasProbeShield() %>|<% } %>">
+				<%
+	i += 1
+}
+%>
+				<%
+i = 1
+for fleet in fleets: {
+%>
+				<param name="fleet<%= i %>" value="<%= fleet.origin().name() %>|<%= fleet.destination().name() %>|<%= fleet.numShips() %>|<%= fleet.percentTraveled() %>|<%= fleet.unitType() %>">
+				<%
+	i += 1
+}
+%>
+			  </APPLET> 
+			  </a>
+			</td>
+			<td class="appletSidebar"> <a href="console.psp?appletHeight=<%= appletHeight + 100 %>"/>Taller</a><br/>
+			  <a href="console.psp?appletHeight=<%= appletHeight - 100 %>"/>Shorter</a><br/>
+			  <a href="console.psp?appletWidth=<%= appletWidth + 100 %>"/>Wider</a><br/>
+			  <a href="console.psp?appletWidth=<%= appletWidth - 100 %>"/>Narrower</a></td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="3"> 
+		<table width="100%" border="0" cellspacing="0">
+		  <tr>
+	  		<td width="250" class="consoleHeading">
+		  		<span style="cursor:pointer; cursor:hand" onClick="expandItem('standings')"><% if gameOver: { %>Final <% } %>Standings</span>
+			</td>
+			<td width="10">
+				&nbsp;
+			</td>
+	  		<td class="consoleHeading">
+		  		<span style="cursor:pointer; cursor:hand" onClick="expandItem('news')">News</span>
+			</td>
+		  </tr>
+		  <tr>
+			<td width="250" valign="top" class="consoleItemList"> 
+				<table width="100%" border=0 cellpadding=5 cellspacing=0 id="standings">
+				  <tr> 
+					<td><b>Player</b></td>
+					<td><b>Score</b></td>
+				  </tr>
+				  <%
+		scores = snapshot.getScores()
+		rowCounter = 0
+		for scorePlayer, score in scores: {
+			name = scorePlayer.name()
+			rowCounter += 1
+		%>
+				  <tr class="<%= rowClasses[rowCounter % 2] %>" > 
+					<td> 
+					  <%
+		if scorePlayer != client: {
+		%>
+					  <a href="comm.psp?toPlayer=<%= name %>"><%= name %></a> 
+					  <%
+		}
+		else: {
+		%>
+					  <%= name %> 
+					  <%
+		}
+		%>
+					</td>
+					<td><%= score %></td>
+				  </tr>
+				  <%
+		}
+		%>
+				</table>
+			</td>
+			<td width="10">
+				&nbsp;
+			</td>
+			<td valign="top" id="news" class="consoleItemList"> 
+				<table width="650" border=0 cellpadding=5 cellspacing=0>
+				  <tr> 
+					<td><b>Date/Time</b></td>
+					<td><b>Description</b></td>
+				  </tr>
+				  <%
+		rowCounter = 0
+		for event in snapshot.events(): {
+			rowCounter += 1
+		%>
+				  <tr class="<%= rowClasses[rowCounter % 2] %>" > 
+					<td><%= event.executionTime() %></td>
+					<td><%= self.formatEventMessage(event.uiDescription()) %></td>
+				  </tr>
+				  <%
+		}
+		%>
+				</table>
+			  </td>
+			</tr>
+		</table>
+	</tr>
+  </table>
+
+</center></body>
+</html>

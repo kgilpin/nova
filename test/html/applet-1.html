@@ -1,0 +1,37 @@
+<script>
+alert('load');
+
+function dispatch(origin, destination) {
+	var url = "/nova/dispatch.psp";
+	if ( origin != null )
+	{
+		url = url + '?origin=' + escape(origin);
+	}
+	if ( destination != null )
+	{
+		if ( origin == null )
+			url = url + '?';
+		else
+			url = url + '&';
+		url = url + 'destination=' + escape(destination);
+	}
+	alert(url);
+	window.open('child.html');
+   }
+</script>
+
+<APPLET MAYSCRIPT CODE="nova.applet.NovaApplet.class" ARCHIVE="nova-applet.jar" WIDTH=500 HEIGHT=500 VSPACE=10 HSPACE=10 NAME="Nova Map">
+  <param name="debug" value="false">
+  <param name="player" value="kevin">
+  <param name="range" value="15">
+  <param name="playercolor" value="000204051">
+
+  <param name="star1" value="62|51|kevin|kevin|0|10|224|0|0|0|">
+  <param name="star2" value="71|45|Avior|kevin|0|15|16|0|0|0|">
+  <param name="star3" value="59|38|Keid|Nobody|0|15|">
+  <param name="star4" value="62|64|Rasalhague|Nobody|0|18|">
+
+  <param name="fleet1" value="kevin|Avior|1|47.3362416229|Ship">
+  <param name="fleet2" value="kevin|Keid|1|26.6641304545|SpyProbe">
+  <param name="fleet3" value="kevin|Rasalhague|1|9.47888890902|DeathProbe">
+</APPLET>

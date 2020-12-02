@@ -1,0 +1,20 @@
+<!-- begin script
+/******************************************
+* Contractible Headers Script- © Dynamic Drive (www.dynamicdrive.com)
+* Visit http://www.dynamicdrive.com/ for full source code
+* This notice must stay intact for use
+******************************************/
+
+function expandit(curobj) {
+	var ns6=document.getElementById&&!document.all?1:0;
+	var head="display:''";
+	var folder='';
+
+	folder = ns6?curobj.nextSibling.nextSibling.style:document.all[curobj.sourceIndex+1].style;
+	if (folder.display=="none")
+		folder.display="";
+	else
+		folder.display="none";
+}
+// end script -->
+

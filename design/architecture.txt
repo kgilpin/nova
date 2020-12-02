@@ -1,0 +1,146 @@
+Core Server
+===========
+
+------------------
+| MySQL database |
+------------------
+       |
+------------------
+| Python WebWare | ( requires Python 2.0 or greater )
+|   MiddleKit    |
+------------------
+       |
+------------------         ------------
+|  Generated     |    ---->| Triggers |
+| Python beans   |    |    ------------
+------------------------   -----------   --------
+| Python 'events'      |<--| Python  |<--| Cron |
+| implement game logic |   | Engine  |   --------
+------------------------   -----------
+             ^
+        -----|------------
+        | Player actions |
+        ------------------
+
+
+At the start of the game, the initial game state is created as Python beans and then saved into the MySQL database.
+Player actions are submitted to the site. Each action creates a new Event (FleetDeparture, FactoryPurchase, etc), which
+is saved into the database. cron runs the game Engine periodically (say, every minute). The game engine looks for 
+all un-processed Events, loads them, and executes the game logic which is implemented on each bean. Each Event may update the game
+state, and it may also create new Events. For example, a FleetDeparture event schedules a FleetArrival event by computing the
+travel time from the distance between the stars and the player's current speed.
+
+All the events are saved in the database, along with the current game state. It may also prove to be useful to save periodic snapshots
+of the game state so that the game can be replayed from an indermediate stage.
+
+When an event is successfully processed, it can be passed through a Trigger. Each trigger looks at the results of 
+the event, and may decide to take further action such as sending a message to the player, or automatically creating
+a new Event.
+
+HTML Client
+===========
+
+The HTML client performs the following basic functions:
+
+o Query the server for the current game state and show it in an applet or other client-side UI
+o Query for lists of events which are visible to the player and display them
+o Submit commands in response to user actions
+
+HTML Server
+===========
+
+The HTML server interfaces with the Python beans to implement the methods required by the HTML client. It implements the logic which filters the complete list of events to remove information which should not be visible to the player.
+
+Web Service Server
+==================
+
+Commands may also be submitted using XML-RPC. The XML-RPC message is converted into a Python event bean, which is saved into the database in the normal manner.
+
+Triggers
+========
+
+A Trigger is any object which responds to the successful execution of an event. Triggers are defined per-player,
+and can be dynamically added and removed during the course of the game. Each Trigger defines a particular event
+to which it responds. It can also declare a few customization parameters which may be filled in by the user.
+Customization parameters are added to the locals() dictionary before the Trigger code is executed. In addition,
+the triggering Event is always available as the local variable 'event'.
+
+There are currently two classes of Trigger : EventGenerator, and MessageGenerator. EventGenerators create new
+events in response to completed events, while MessageGenerators send messages to players. The message transports,
+such as e-mail and instant messengers,  are implemented separately from the MessageGenerators. When a new MessageGenerator 
+is instantiated for a player, the player can specify and customize the message transport. 
+
+Trigger code can fail in the following ways:
+o The Trigger is unable to carry out the task which it is designed to do. For instance a Trigger may try
+  to find a routing from one Star to another, but there is no path between the two which satisfies the constraints
+  of the Player's range.
+  * In this case, the Trigger should throw a TriggerFailedException. 
+o The Event created by a Trigger may not be valid. For instance, the Trigger may attempt to purchase factories on
+  a Star, but the Player does not have enough cash
+  * In this case, the Engine will detect that the Event is invalid
+o The Trigger may throw some Python runtime exception due to buggy implementation
+  * The engine will catch an exception other than a TriggerFailedException
+  
+In each case, the Player can configure the game to notify her when a failure occurs, e.g. by e-mail.
+
+Long Distance Fleet Routing
+===========================
+
+When a fleet of Ships is dispatched, it should be possible to specify a final destination which requires multiple
+hops to reach. The final destination should be displayed in the GUI, and the player should be allowed to cancel it at any time.
+The ships will then arrive at the star they are going to, and stop.
+
+Each time the fleet arrives at a star, the server should immediately disptach them to whichever star will get
+them to their final destination in the most expedient manner. Dead stars and enemy stars should of course be
+avoided.
+
+Deployment Orders
+=================
+
+A star can be configured to send some or all of its ships to a remote destination. When production occurs, or 
+new ships arrive at the star, they are automatically dispatched to the designated star. The player can also specify
+the size of a garrison to leave on the star. If the origin or destination is lost to an enemy or destroyed, 
+the AutoDeploy order is canceled.
+
+Web Service API
+===============
+
+Nova supports a web service API for querying game data and submitting commands. 
+
+Commands available are:
+
+dispatchFleet(gameId, playerName, password, origin, destination, numShips, delay)
+dispatchProbe(gameId, playerName, password, origin, destination, delay)
+dispatchNovaBomb(gameId, playerName, password, origin, destination, delay)
+
+Queries available are:
+
+Snapshot getSnapshot(client, since, eventLimit)
+
+The Snapshot consists of Python beans which are marshaled into XML. This XML message can be reconstructed on the 
+other side into Python beans, or potentially into objects in another language (e.g. Java).
+
+The commands and queries may be easily executing in Python code (other XML-RPC implementations will work as well of course).
+For example:
+
+	>>> import xmlrpclib
+	>>> server = xmlrpclib.Server('http://ironworks.cc/nova/XMLRPCAPI.py')
+	>>> server.dispatchFleet(17, 'joebob', 'passwd', 'Orion', 'Sirius', 10, 0)
+
+Login Process
+=============
+
+Users must log in to:
+o create new games
+o perform admin functions on their own user info (e-mail addresses, etc)
+o add themselves to an open game
+o play a game
+
+Login is accomplished by entering the correct user name and password. 
+
+To play a game, the user must log in and then select the match. Their Player alias for the game is looked up from the database
+and placed in a browser cookie along with the credentials, then they don't need to log in again.
+
+The user can switch games by changing the gameId and playerId cookie.
+
+Games are identified by serialNum (ID), and may also have a name which will make the game easier for the players to remember.

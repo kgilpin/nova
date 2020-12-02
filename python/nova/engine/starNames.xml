@@ -1,0 +1,313 @@
+<stars>
+	<star><name>Acamar</name><mag>3.24</mag></star>
+	<star><name>Achernar</name><mag>0.46</mag></star>
+	<star><name>Achird</name><mag>3.44</mag></star>
+	<star><name>Acrab</name><mag>2.62</mag></star>
+	<star><name>Acrux</name><mag>1.33</mag></star>
+	<star><name>Acrux A</name><mag>1.33</mag></star>
+	<star><name>Acrux B</name><mag>2.1</mag></star>
+	<star><name>Acubens</name><mag>4.25</mag></star>
+	<star><name>Adhafera</name><mag>3.44</mag></star>
+	<star><name>Adhara</name><mag>1.5</mag></star>
+	<star><name>Adhil</name><mag>4.88</mag></star>
+	<star><name>Agena</name><mag>0.61</mag></star>
+	<star><name>Ain</name><mag>3.53</mag></star>
+	<star><name>Ain Al Rami</name><mag>4.83</mag></star>
+	<star><name>Al Kalb Al Rai</name><mag>5.5</mag></star>
+	<star><name>Al Miniliar Al Asad</name><mag>4.46</mag></star>
+	<star><name>Aladfar</name><mag>4.39</mag></star>
+	<star><name>Alathfar</name><mag>5.12</mag></star>
+	<star><name>Albaldah</name><mag>2.89</mag></star>
+	<star><name>Albali</name><mag>3.77</mag></star>
+	<star><name>Albireo</name><mag>3.08</mag></star>
+	<star><name>Alchiba</name><mag>4.02</mag></star>
+	<star><name>Alcor</name><mag>4.01</mag></star>
+	<star><name>Alcyone</name><mag>2.87</mag></star>
+	<star><name>Aldebaran</name><mag>0.85</mag></star>
+	<star><name>Alderamin</name><mag>2.44</mag></star>
+	<star><name>Aldhibah</name><mag>3.17</mag></star>
+	<star><name>Alfecca Meridiana</name><mag>4.11</mag></star>
+	<star><name>Alfirk</name><mag>3.23</mag></star>
+	<star><name>Algedi Secunda</name><mag>3.57</mag></star>
+	<star><name>Algenib</name><mag>2.83</mag></star>
+	<star><name>Algieba</name><mag>2.61</mag></star>
+	<star><name>Algiedi Prima</name><mag>4.24</mag></star>
+	<star><name>Algol</name><mag>2.12</mag></star>
+	<star><name>Algorab</name><mag>2.95</mag></star>
+	<star><name>Alhena</name><mag>1.93</mag></star>
+	<star><name>Alioth</name><mag>1.77</mag></star>
+	<star><name>Alkaid</name><mag>1.86</mag></star>
+	<star><name>Alkalurops</name><mag>4.31</mag></star>
+	<star><name>Alkes</name><mag>4.08</mag></star>
+	<star><name>Alkurhah</name><mag>4.29</mag></star>
+	<star><name>Almaak</name><mag>2.26</mag></star>
+	<star><name>Almaaz</name><mag>2.99</mag></star>
+	<star><name>Alnair</name><mag>1.74</mag></star>
+	<star><name>Alnasl</name><mag>2.99</mag></star>
+	<star><name>Alnath</name><mag>1.65</mag></star>
+	<star><name>Alnilam</name><mag>1.7</mag></star>
+	<star><name>Alnitak</name><mag>2.05</mag></star>
+	<star><name>Alniyat</name><mag>2.89</mag></star>
+	<star><name>Alphard</name><mag>1.98</mag></star>
+	<star><name>Alphekka</name><mag>2.23</mag></star>
+	<star><name>Alpheratz</name><mag>2.06</mag></star>
+	<star><name>Alrami</name><mag>3.97</mag></star>
+	<star><name>Alrischa</name><mag>4.33</mag></star>
+	<star><name>Alsafi</name><mag>4.68</mag></star>
+	<star><name>Alshain</name><mag>3.71</mag></star>
+	<star><name>Alshat</name><mag>4.76</mag></star>
+	<star><name>Altair</name><mag>0.77</mag></star>
+	<star><name>Altais</name><mag>3.07</mag></star>
+	<star><name>Altarf</name><mag>3.52</mag></star>
+	<star><name>Alterf</name><mag>4.31</mag></star>
+	<star><name>Aludra</name><mag>2.45</mag></star>
+	<star><name>Alula Australis</name><mag>4.41</mag></star>
+	<star><name>Alula Borealis</name><mag>3.48</mag></star>
+	<star><name>Alya</name><mag>4.62</mag></star>
+	<star><name>Alzirr</name><mag>3.36</mag></star>
+	<star><name>Ancha</name><mag>4.16</mag></star>
+	<star><name>Andromeda Nebula</name><mag>5.8</mag></star>
+	<star><name>Angetenar</name><mag>4.75</mag></star>
+	<star><name>Ankaa</name><mag>2.39</mag></star>
+	<star><name>Anser</name><mag>4.44</mag></star>
+	<star><name>Antares</name><mag>0.96</mag></star>
+	<star><name>Arcturus</name><mag>-0.04</mag></star>
+	<star><name>Arkab Posterior</name><mag>4.29</mag></star>
+	<star><name>Arkab Prior</name><mag>4.01</mag></star>
+	<star><name>Arneb</name><mag>2.58</mag></star>
+	<star><name>Arrakis</name><mag>5.8</mag></star>
+	<star><name>Ascella</name><mag>2.6</mag></star>
+	<star><name>Asellus Australis</name><mag>3.94</mag></star>
+	<star><name>Asellus Borealis</name><mag>4.66</mag></star>
+	<star><name>Asellus Primus</name><mag>4.05</mag></star>
+	<star><name>Asellus Secundus</name><mag>4.75</mag></star>
+	<star><name>Asellus Tertius</name><mag>4.54</mag></star>
+	<star><name>Asmidiske</name><mag>3.34</mag></star>
+	<star><name>Asterope</name><mag>5.76</mag></star>
+	<star><name>Atik</name><mag>3.83</mag></star>
+	<star><name>Atlas</name><mag>3.63</mag></star>
+	<star><name>Atria</name><mag>1.92</mag></star>
+	<star><name>Auva</name><mag>3.38</mag></star>
+	<star><name>Avior</name><mag>1.86</mag></star>
+	<star><name>Azelfafage</name><mag>4.67</mag></star>
+	<star><name>Azha</name><mag>3.89</mag></star>
+	<star><name>Baten Kaitos</name><mag>3.73</mag></star>
+	<star><name>Beid</name><mag>4.04</mag></star>
+	<star><name>Bellatrix</name><mag>1.64</mag></star>
+	<star><name>Betelgeuse</name><mag>0.5</mag></star>
+	<star><name>Biham</name><mag>3.53</mag></star>
+	<star><name>Bogardus</name><mag>2.62</mag></star>
+	<star><name>Booboo</name><mag>2.74</mag></star>
+	<star><name>Botein</name><mag>4.35</mag></star>
+	<star><name>Brachium</name><mag>3.29</mag></star>
+	<star><name>Bradley 3077</name><mag>5.56</mag></star>
+	<star><name>Canopus</name><mag>-0.72</mag></star>
+	<star><name>Capella</name><mag>0.08</mag></star>
+	<star><name>Caph</name><mag>2.27</mag></star>
+	<star><name>Castor A</name><mag>1.98</mag></star>
+	<star><name>Castor B</name><mag>2.9</mag></star>
+	<star><name>Cebalrai</name><mag>2.77</mag></star>
+	<star><name>Celaeno</name><mag>5.46</mag></star>
+	<star><name>Chara</name><mag>4.26</mag></star>
+	<star><name>Chertan</name><mag>3.34</mag></star>
+	<star><name>Cor Caroli</name><mag>2.9</mag></star>
+	<star><name>Cursa</name><mag>2.79</mag></star>
+	<star><name>Dabih</name><mag>3.08</mag></star>
+	<star><name>Dabih Minor</name><mag>6.1</mag></star>
+	<star><name>Deneb</name><mag>1.25</mag></star>
+	<star><name>Deneb Algedi</name><mag>2.87</mag></star>
+	<star><name>Deneb Dulfim</name><mag>4.03</mag></star>
+	<star><name>Deneb El Okab</name><mag>4.02</mag></star>
+	<star><name>Deneb Kaitos Shemali</name><mag>3.56</mag></star>
+	<star><name>Denebola</name><mag>2.14</mag></star>
+	<star><name>Diadem</name><mag>5.22</mag></star>
+	<star><name>Diphda</name><mag>2.04</mag></star>
+	<star><name>Double Double</name><mag>5.06</mag></star>
+	<star><name>Dschubba</name><mag>2.32</mag></star>
+	<star><name>Dubhe</name><mag>1.79</mag></star>
+	<star><name>Dziban</name><mag>4.58</mag></star>
+	<star><name>Ed Asich</name><mag>3.29</mag></star>
+	<star><name>Electra</name><mag>3.7</mag></star>
+	<star><name>Enif</name><mag>2.39</mag></star>
+	<star><name>Errai</name><mag>3.21</mag></star>
+	<star><name>Etamin</name><mag>2.23</mag></star>
+	<star><name>Fieht</name><mag>2.56</mag></star>
+	<star><name>Fomalhaut</name><mag>1.16</mag></star>
+	<star><name>Fornacis</name><mag>3.87</mag></star>
+	<star><name>Fum Al Samakah</name><mag>4.53</mag></star>
+	<star><name>Furud</name><mag>3.02</mag></star>
+	<star><name>Gacrux</name><mag>1.63</mag></star>
+	<star><name>Galt</name><mag>2</mag></star>
+	<star><name>Giausar</name><mag>3.84</mag></star>
+	<star><name>Gienah</name><mag>2.46</mag></star>
+	<star><name>Gienah Ghurab</name><mag>2.59</mag></star>
+	<star><name>Girtab</name><mag>1.87</mag></star>
+	<star><name>Gomeisa</name><mag>2.9</mag></star>
+	<star><name>Gorgonea Quarta</name><mag>4.63</mag></star>
+	<star><name>Gorgonea Secunda</name><mag>4.7</mag></star>
+	<star><name>Gorgonea Tertia</name><mag>3.39</mag></star>
+	<star><name>Groombridge 1830</name><mag>8.5</mag></star>
+	<star><name>Grumium</name><mag>3.75</mag></star>
+	<star><name>Hamal</name><mag>2</mag></star>
+	<star><name>Hassaleh</name><mag>2.69</mag></star>
+	<star><name>Head Of Hydrus</name><mag>2.86</mag></star>
+	<star><name>Heka</name><mag>3.54</mag></star>
+	<star><name>Herschels Garnet Star</name><mag>4.08</mag></star>
+	<star><name>Heze</name><mag>3.37</mag></star>
+	<star><name>Hinds Crimson Star</name><mag>5.5</mag></star>
+	<star><name>Hoedus I</name><mag>3.75</mag></star>
+	<star><name>Hoedus Ii</name><mag>3.17</mag></star>
+	<star><name>Homam</name><mag>3.4</mag></star>
+	<star><name>Hr2748</name><mag>2.6</mag></star>
+	<star><name>Hr3803</name><mag>3.12</mag></star>
+	<star><name>Hr4140</name><mag>3.3</mag></star>
+	<star><name>Hr6630</name><mag>3.2</mag></star>
+	<star><name>Hyadum I</name><mag>3.65</mag></star>
+	<star><name>Hyadum Ii</name><mag>3.76</mag></star>
+	<star><name>Izar</name><mag>2.7</mag></star>
+	<star><name>Jabbah</name><mag>4.01</mag></star>
+	<star><name>Kaffaljidhma</name><mag>3.47</mag></star>
+	<star><name>Kajam</name><mag>4.57</mag></star>
+	<star><name>Kaus Australis</name><mag>1.85</mag></star>
+	<star><name>Kaus Borealis</name><mag>2.81</mag></star>
+	<star><name>Kaus Media</name><mag>2.7</mag></star>
+	<star><name>Keid</name><mag>4.43</mag></star>
+	<star><name>Kitalpha</name><mag>3.92</mag></star>
+	<star><name>Kocab</name><mag>2.08</mag></star>
+	<star><name>Kornephoros</name><mag>2.77</mag></star>
+	<star><name>Kraz</name><mag>2.65</mag></star>
+	<star><name>Kuma</name><mag>4.87</mag></star>
+	<star><name>Lesath</name><mag>2.69</mag></star>
+	<star><name>Maasym</name><mag>4.41</mag></star>
+	<star><name>Mabsuthat</name><mag>4.25</mag></star>
+	<star><name>Maia</name><mag>3.87</mag></star>
+	<star><name>Marfak</name><mag>4.33</mag></star>
+	<star><name>Marfic</name><mag>3.82</mag></star>
+	<star><name>Marfik</name><mag>5</mag></star>
+	<star><name>Marj</name><mag>2.47</mag></star>
+	<star><name>Markab</name><mag>2.49</mag></star>
+	<star><name>Matar</name><mag>2.94</mag></star>
+	<star><name>Mebsuta</name><mag>2.98</mag></star>
+	<star><name>Megrez</name><mag>3.31</mag></star>
+	<star><name>Mekbuda</name><mag>3.79</mag></star>
+	<star><name>Menkalinan</name><mag>1.9</mag></star>
+	<star><name>Menkar</name><mag>2.53</mag></star>
+	<star><name>Menkent</name><mag>2.06</mag></star>
+	<star><name>Menkib</name><mag>4.04</mag></star>
+	<star><name>Merak</name><mag>2.37</mag></star>
+	<star><name>Merga</name><mag>5.74</mag></star>
+	<star><name>Merope</name><mag>4.18</mag></star>
+	<star><name>Mesarthim</name><mag>4.75</mag></star>
+	<star><name>Miaplacidus</name><mag>1.68</mag></star>
+	<star><name>Mimosa</name><mag>1.25</mag></star>
+	<star><name>Minchir</name><mag>4.44</mag></star>
+	<star><name>Minkar</name><mag>3</mag></star>
+	<star><name>Mintaka</name><mag>2.23</mag></star>
+	<star><name>Mira</name><mag>2</mag></star>
+	<star><name>Mirach</name><mag>2.06</mag></star>
+	<star><name>Miram</name><mag>3.76</mag></star>
+	<star><name>Mirphak</name><mag>1.79</mag></star>
+	<star><name>Mirzam</name><mag>1.98</mag></star>
+	<star><name>Mizar</name><mag>2.27</mag></star>
+	<star><name>Mothallah</name><mag>3.41</mag></star>
+	<star><name>Muliphein</name><mag>4.12</mag></star>
+	<star><name>Muphrid</name><mag>2.68</mag></star>
+	<star><name>Muscida</name><mag>3.36</mag></star>
+	<star><name>Nair Al Saif</name><mag>2.77</mag></star>
+	<star><name>Naos</name><mag>2.25</mag></star>
+	<star><name>Nashira</name><mag>3.68</mag></star>
+	<star><name>Nekkar</name><mag>3.5</mag></star>
+	<star><name>Nihal</name><mag>2.84</mag></star>
+	<star><name>Nunki</name><mag>2.02</mag></star>
+	<star><name>Nusakan</name><mag>3.68</mag></star>
+	<star><name>Peacock</name><mag>1.94</mag></star>
+	<star><name>Phact</name><mag>2.64</mag></star>
+	<star><name>Phad</name><mag>2.44</mag></star>
+	<star><name>Pherkad</name><mag>3.05</mag></star>
+	<star><name>Pherkad Minor</name><mag>5.02</mag></star>
+	<star><name>Plasketts Star</name><mag>6.04</mag></star>
+	<star><name>Pleione</name><mag>4.77</mag></star>
+	<star><name>Polaris</name><mag>2.02</mag></star>
+	<star><name>Polaris Australis</name><mag>5.47</mag></star>
+	<star><name>Pollux</name><mag>1.14</mag></star>
+	<star><name>Poririma</name><mag>3.65</mag></star>
+	<star><name>Praecipua</name><mag>3.83</mag></star>
+	<star><name>Procyon</name><mag>0.38</mag></star>
+	<star><name>Propus</name><mag>3.28</mag></star>
+	<star><name>Proxima Centauri</name><mag>12.1</mag></star>
+	<star><name>Rana</name><mag>3.54</mag></star>
+	<star><name>Ras Elased Australis</name><mag>2.98</mag></star>
+	<star><name>Rasalas</name><mag>3.88</mag></star>
+	<star><name>Rasalgethi</name><mag>3.48</mag></star>
+	<star><name>Rasalhague</name><mag>2.08</mag></star>
+	<star><name>Rastaban</name><mag>2.79</mag></star>
+	<star><name>Regulus</name><mag>1.35</mag></star>
+	<star><name>Rigel</name><mag>0.12</mag></star>
+	<star><name>Rigil Kentaurus</name><mag>-0.01</mag></star>
+	<star><name>Rijl As Awwa</name><mag>3.88</mag></star>
+	<star><name>Rotanev</name><mag>3.63</mag></star>
+	<star><name>Ruchbah</name><mag>2.68</mag></star>
+	<star><name>Sabik</name><mag>2.43</mag></star>
+	<star><name>Sadachbia</name><mag>3.84</mag></star>
+	<star><name>Sadalbari</name><mag>3.48</mag></star>
+	<star><name>Sadalmelik</name><mag>2.96</mag></star>
+	<star><name>Sadalsuud</name><mag>2.91</mag></star>
+	<star><name>Sadr</name><mag>2.2</mag></star>
+	<star><name>Saiph</name><mag>2.06</mag></star>
+	<star><name>Salm</name><mag>4.6</mag></star>
+	<star><name>Sarin</name><mag>3.14</mag></star>
+	<star><name>Sceptrum</name><mag>3.87</mag></star>
+	<star><name>Scheat</name><mag>2.42</mag></star>
+	<star><name>Segin</name><mag>3.38</mag></star>
+	<star><name>Seginus</name><mag>3.03</mag></star>
+	<star><name>Sham</name><mag>4.37</mag></star>
+	<star><name>Shaula</name><mag>1.63</mag></star>
+	<star><name>Shedir</name><mag>2.23</mag></star>
+	<star><name>Sheliak</name><mag>3.45</mag></star>
+	<star><name>Sheratan</name><mag>2.64</mag></star>
+	<star><name>Sirius</name><mag>-1.46</mag></star>
+	<star><name>Situla</name><mag>5.03</mag></star>
+	<star><name>Skat</name><mag>3.27</mag></star>
+	<star><name>Spica</name><mag>0.98</mag></star>
+	<star><name>Sterope Ii</name><mag>6.43</mag></star>
+	<star><name>Sualocin</name><mag>3.77</mag></star>
+	<star><name>Subra</name><mag>3.52</mag></star>
+	<star><name>Suhail</name><mag>2.21</mag></star>
+	<star><name>Suhail Al Muhlif</name><mag>1.78</mag></star>
+	<star><name>Sulafat</name><mag>3.24</mag></star>
+	<star><name>Syrma</name><mag>4.08</mag></star>
+	<star><name>Tabit</name><mag>3.19</mag></star>
+	<star><name>Talitha</name><mag>3.14</mag></star>
+	<star><name>Tania Australis</name><mag>3.05</mag></star>
+	<star><name>Tania Borealis</name><mag>3.45</mag></star>
+	<star><name>Tarazed</name><mag>2.72</mag></star>
+	<star><name>Taygeta</name><mag>4.3</mag></star>
+	<star><name>Tegmen</name><mag>5.63</mag></star>
+	<star><name>Tejat Posterior</name><mag>2.88</mag></star>
+	<star><name>Terebellum</name><mag>4.7</mag></star>
+	<star><name>Theemim</name><mag>3.82</mag></star>
+	<star><name>Thuban</name><mag>3.65</mag></star>
+	<star><name>Torcularis Septentrionalis</name><mag>4.26</mag></star>
+	<star><name>Trapezium</name><mag>7.9</mag></star>
+	<star><name>Turais</name><mag>2.25</mag></star>
+	<star><name>Tyl</name><mag>3.83</mag></star>
+	<star><name>Unukalhai</name><mag>2.65</mag></star>
+	<star><name>Vega</name><mag>0.03</mag></star>
+	<star><name>Vindemiatrix</name><mag>2.83</mag></star>
+	<star><name>Wasat</name><mag>3.53</mag></star>
+	<star><name>Wazn</name><mag>3.12</mag></star>
+	<star><name>Wezen</name><mag>1.84</mag></star>
+	<star><name>Yed Posterior</name><mag>3.24</mag></star>
+	<star><name>Yed Prior</name><mag>2.74</mag></star>
+	<star><name>Yildun</name><mag>4.36</mag></star>
+	<star><name>Zaniah</name><mag>3.89</mag></star>
+	<star><name>Zaurak</name><mag>2.95</mag></star>
+	<star><name>Zavijava</name><mag>3.61</mag></star>
+	<star><name>Zibal</name><mag>4.8</mag></star>
+	<star><name>Zosma</name><mag>2.56</mag></star>
+	<star><name>Zuben Elakribi</name><mag>4.92</mag></star>
+	<star><name>Zuben Elgenubi</name><mag>2.75</mag></star>
+	<star><name>Zuben Eschamali</name><mag>2.61</mag></star>
+	<star><name>Zuben Hakriki</name><mag>3.91</mag></star>
+	<star><name>Q Car</name><mag>3.36</mag></star>
+</stars>

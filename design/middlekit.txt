@@ -1,0 +1,5 @@
+
+file:///d:/python/Webware-0.6.1/MiddleKit/Docs/QuickStart.html
+
+Requires Python 2.0
+mxDateTime : http://www.lemburg.com/files/python/eGenix-mx-Extensions.html#Download-mxBASE

@@ -1,0 +1,54 @@
+body { 
+	background: #000000;
+	font-family: Tahoma, Verdana, sans-serif; 
+	font-size: 12px;
+	font-weight: normal; 
+	color: #ffffff;
+	text-decoration: none;
+	margin-top: 0; 
+	margin-left: 0; 
+	margin-right: 0; 
+	margin-bottom: 0;
+}
+
+table { 
+	font-size: 12px;
+}
+
+td#actions {
+	font-size: 14px;
+}
+
+.consoleHeading {
+	font-weight: bold;
+}
+
+a:link {
+	color: #ccccff;
+}
+a:visited {
+	color: #cccccc;
+}
+a:hover {
+	color: #ccffff;
+}
+
+a:active {
+	color: #ffffff;
+}
+
+.consoleItemList {
+	background: #112211;
+}
+
+.appletSidebar {
+	background: #112211;
+}
+
+tr.rowOdd {
+	background: #333333;
+}
+
+tr.rowEven {
+	background: #666666;
+}

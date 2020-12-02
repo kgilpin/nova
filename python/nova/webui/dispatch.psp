@@ -1,0 +1,106 @@
+<%@ page imports= "sys,os,time,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+<%
+from nova.api import query
+from nova.Star import Star, sortByName
+from mx import DateTime
+
+if not self.login(): return
+
+mkPlayer = self.player()
+
+snapshot = query.getSnapshot(mkPlayer, since = DateTime.now() - DateTime.DateTimeDelta(1))
+game = snapshot.game()
+client = snapshot.clientPlayer()
+
+origin = self.request().field('origin', None)
+destination = self.request().field('destination', None)
+numShips = self.request().field('numShips', 1)
+
+ownedStars = snapshot.getOwnedLiveStars()
+allStars = snapshot.stars()
+
+ownedStars.sort(sortByName)
+allStars.sort(sortByName)
+
+%>
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+	<script language="JavaScript">
+function validateForm(form)
+{
+	if (!validInt(form.numShips,"Number of Ships", false))
+		return false;
+	if (!validInt(form.delay,"Delay", false))
+		return false;
+	return true;
+}
+	</script>
+</head>
+<body>
+<%@ include file="printMessageOrError.psp" %>
+
+<center>
+
+<form onsubmit="return validateForm(this)" action="DispatchAction.py">
+    <table border="0">
+      <tr> 
+        <td align="right" width="118">From</td>
+        <td align="left" width="154"> 
+          <select name="origin">
+            <%
+for star in ownedStars: {
+%>
+            <option <% if star.name() == origin: { %>selected <% } %>><%= star.name() %></option>
+            <%
+}
+%>
+          </select>
+        </td>
+      <tr> 
+        <td align="right" width="118"> To </td>
+        <td align="left" width="154"> 
+          <select name="destination">
+            <%
+for star in allStars: {
+%>
+            <option <% if star.name() == destination: { %>selected <% } %>><%= star.name() %></option>
+            <%
+}
+%>
+          </select>
+        </td>
+      </tr>
+      <tr> 
+        <td align="right" width="118"> Number of Ships </td>
+        <td align="left" width="154"> 
+          <input name="numShips" type="text" value="<%= numShips %>" />
+        </td>
+      </tr>
+      <tr> 
+        <td align="right" width="118">Delay by (minutes)</td>
+        <td align="left" width="154"><input type="text" name="delay" value="5" /></td>
+      </tr>
+    </table>
+
+<%
+uri = self.request().uri()
+if uri.find('?') != -1: {
+	uri = uri[0:uri.find('?')]
+}
+%>
+<input type="Hidden" name="returnToURL" value="<%= self.urlEncode(uri) %>" />
+
+<input name="_action_ships" type="Submit" value="Send Ships" /><br/>
+<input name="_action_spy" type="Submit" value="Send Probe ($<%= game.probeCost() %>)" /><br/>
+<input name="_action_bomb" type="Submit" value="Send Nova Bomb ($<%= game.novaBombCost() %>)" />
+</form>
+</center>
+
+<%@ include file="unload.psp" %>
+</body>
+

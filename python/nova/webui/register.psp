@@ -1,0 +1,51 @@
+<%@ page imports = "sys,os,time,nova.webui.NovaPage:NovaPage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="NovaPage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+
+<head>
+	<title>Register</title>
+
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+	<script language="JavaScript">
+function validateForm(form)
+{
+	if ( form.userName != null && !validRequired(form.userName,"User name"))
+		return false;
+	if ( form.password != null && !validRequired(form.password,"Password"))
+		return false;
+	if ( form.email != null && !validEmail(form.email,"Email address", true))
+		return false;
+	return true;
+}
+	</script>
+</head>
+
+<body>
+
+<center>
+	<h1>Register</h1>
+</center>
+
+<%@ include file="printMessageOrError.psp" %>
+
+	<form onsubmit="return validateForm(this)" action="RegisterAction.py">
+		<table border="0">
+		<tr>
+			<td align="right">User name:</td><td align="left"><input type="text" name="userName"></td>
+		</tr>
+		<tr>
+			<td align="right">Password:</td><td align="left"><input type="password" name="password"></td>
+		</tr>
+		<tr>
+			<td align="right">E-mail address:</td><td align="left"><input type="text" name="email"></td>
+		</tr>
+		<tr>
+      		<td colspan="2" align="center"><input type="submit" name="_action_register" value="Register" /></td>	  
+		</tr>
+
+	</form>
+
+</body>

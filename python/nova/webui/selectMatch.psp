@@ -1,0 +1,53 @@
+<%@ page imports = "sys,os,time,nova.webui.NovaPage:NovaPage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="NovaPage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+
+<head>
+	<title>Select Match</title>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+</head>
+<body>
+
+<%
+from nova.Game import Game
+
+games = self.store().fetchObjectsOfClass(Game)
+%>
+
+<%@ include file="printMessageOrError.psp" %>
+
+<form action="SelectMatchAction.py" method="POST">
+
+<table border="0">
+<tr>
+<td align="right">Select Match</td>
+<td align="left"><div align="left">
+		<select name="gameId">
+<%
+for game in games: {
+	description = "%d" % game.serialNum()
+	if game.name(): {
+		description += " : %s" % game.name()
+	}
+%>
+			<option value="<%= game.serialNum() %>"><%= description %></option>
+<% } %>
+		</select>
+</div></td>
+</tr>
+<tr>
+<td align="right">Don't expire</td>
+<td align="left"><div align="left">
+		<input type="checkbox" name="dontExpireLogin" />
+</div></td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<input name="_action_selectGame" type="submit" value="Select Game" />
+</td>
+</table>
+
+</form>
+</body>

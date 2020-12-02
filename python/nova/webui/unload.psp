@@ -1,0 +1,10 @@
+<center>
+<script>
+function unLoad() {
+	window.opener.location.reload(true);
+	window.close();
+}
+</script>
+<a href="javascript:window.close()">Close</a><br>
+<a href="javascript:unLoad()">Close And Refresh</a>
+</center>

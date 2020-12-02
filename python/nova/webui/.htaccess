@@ -1,0 +1,10 @@
+Options -Indexes
+
+DirectoryIndex  index.psp
+RewriteEngine	on
+
+RewriteRule 	^([^\.]*\.py)$	/cgi-bin/OneShot.cgi/Nova/$1
+RewriteRule 	^([^\.]*\.psp)$	/cgi-bin/OneShot.cgi/Nova/$1
+
+#RewriteRule 	^([^\.]*\.py)$	/cgi-bin/WebKit.cgi/Nova/$1
+#RewriteRule 	^([^\.]*\.psp)$	/cgi-bin/WebKit.cgi/Nova/$1

@@ -1,0 +1,29 @@
+<%@ page imports = "sys,os,time,nova.webui.NovaPage:NovaPage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="NovaPage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+
+<head>
+	<title>Nova : Survival and Strategy Game</title>
+
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+</head>
+
+<body>
+
+<center><h1>Nova : Survival and Strategy Game</h1></center>
+
+<center>
+
+<table border="0">
+<tr><td><a href="register.psp">Register</a></td></tr>
+<tr><td><a href="rules.html">Read the Nova rules</a></td></tr>
+<tr><td><a href="newGame.psp">Create a new Match</a></td></tr>
+<tr><td><a href="console.psp">Play!</a></td></tr>
+</table>
+
+</center>
+
+</body>

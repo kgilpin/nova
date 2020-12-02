@@ -1,0 +1,134 @@
+<%@ page imports = "sys,os,time,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%><%
+from nova.api import query
+from nova.Star import Star
+
+if not self.login(): return
+
+mkPlayer = self.player()
+
+snapshot = query.getSnapshot(mkPlayer, eventLimit = 0)
+game = snapshot.game()
+client = snapshot.clientPlayer()
+
+ownedStars = snapshot.getOwnedLiveStars()
+%>
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+	<script language="JavaScript">
+function validateForm(form)
+{
+	if ( form.numFactories != null && !validInt(form.numFactories,"Number of Factories", false))
+		return false;
+	if ( form.range != null && !validNum(form.range,"Range", false))
+		return false;
+	if ( form.desiredSpeed != null && !validNum(form.desiredSpeed,"Desired Speed", false))
+		return false;
+	return true;
+}
+	</script>
+</head>
+<body>
+
+<%@ include file="printMessageOrError.psp" %>
+
+<div align="left">
+<font size="+1">Cash available : $<%= client.ownerInfo().cash() %></font>
+</div>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr bgcolor="#9900FF"> 
+	<form onsubmit="return validateForm(this)" action="PurchaseAction.py">
+      <td nowrap width="60%"> 
+        <div align="right">Purchase 
+          <input type="text" name="numFactories" value="1" />
+          factories (for $<%= game.factoryCost() %> each) on 
+          <select name="star">
+            <%
+for star in ownedStars: {
+%>
+            <option><%= star.name() %></option>
+            <%
+}
+%>
+          </select>
+        </div>
+      </td>
+      <td> 
+        <input type="submit" name="_action_purchaseFactories" value="Purchase Factories" />
+      </td>	  
+	</form>
+    </tr>
+    <tr bgcolor="#9933FF"> 
+	<form onsubmit="return validateForm(this)" action="PurchaseAction.py">
+      <td nowrap width="60%"> 
+        <div align="right">Purchase 
+          <input type="text" name="range" value="0.1" />
+          range ($<%= game.rangeCost() %> per unit)</div>
+      </td>
+      <td> 
+        <input type="submit" name="_action_purchaseRange" value="Purchase Range" />
+      </td>
+	</form>
+    </tr>
+    <tr bgcolor="#9900FF"> 
+	<form onsubmit="return validateForm(this)" action="PurchaseAction.py">
+      <td nowrap width="60%"> 
+        <div align="right">Increase speed to 
+          <input type="text" name="desiredSpeed" value="<%= "%.2f" % client.ownerInfo().speed() %>" />
+          parsecs per hour ($<%= game.speedCost() / game.timeCompression() %> 
+          per unit) </div>
+      </td>
+      <td> 
+        <input type="submit" name="_action_purchaseSpeed" value="Purchase Speed" />
+      </td>
+	</form>
+    </tr>
+    <tr bgcolor="#9933FF"> 
+	<form onsubmit="return validateForm(this)" action="PurchaseAction.py">
+      <td nowrap width="60%"> 
+        <div align="right">Purchase a Probe Shield on 
+          <select name="star">
+            <%
+for star in ownedStars: {
+%>
+            <option><%= star.name() %></option>
+            <%
+}
+%>
+          </select> ($<%= game.probeShieldCost() %>)
+        </div>
+      </td>
+      <td> 
+        <input type="submit" name="_action_purchaseProbeShield" value="Purchase Probe Shield" />
+      </td>
+	</form>
+    </tr>
+    <tr bgcolor="#9933FF"> 
+	<form onsubmit="return validateForm(this)" action="PurchaseAction.py">
+      <td nowrap width="60%"> 
+        <div align="right">Purchase a Nova Bomb Shield on 
+          <select name="star">
+            <%
+for star in ownedStars: {
+%>
+            <option><%= star.name() %></option>
+            <%
+}
+%>
+          </select> ($<%= game.novaShieldCost() %>)
+        </div> 
+      </td>
+      <td> 
+        <input type="submit" name="_action_purchaseNovaShield" value="Purchase Nova Bomb Shield" />
+      </td>
+	</form>
+    </tr>
+  </table>
+
+<%@ include file="unload.psp" %>
+</body>

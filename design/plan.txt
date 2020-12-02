@@ -1,0 +1,151 @@
+NEW FEATURES
+Probes should report on happenings at a star for a complete game turn
+	Should be displayed in a separate, collapsable section of the UI
+Change Deployment Orders to a pop-up
+	All actions should show in pop-ups so that the game screen is not obscured
+Applet should display all the stars that are in range of the selected star, including
+	via routing
+New game preview
+  After the newGame page, the user should get a chance to look at the game change the home worlds which
+    are assigned to the players
+  The game can have an 'owner' which is allowed to make these changes?
+Should be able to schedule the start time of the game
+  Do this also from the 'game preview' page
+  So perhaps we have 'create game' and 'configure game'
+  On the configure game page you can also set the start date/time for the game
+IM transport for alerts
+  Can start with ICQ Pager / Jabber / e-mail for immediate notification of particular events
+  http://www.echomine.org/projects/muse/jabber/
+  http://jabberpy.sourceforge.net/
+  ./jabberClient.py
+Should be able to give cash to another player
+Renaming stars
+  Need to key stars in the applet by their ID rather than name
+Built-in notion of treaties (agreements)
+  Non-agression : cannot send ships or DPs to a star owned by that player
+  	Be able to turn over a star to another player
+  	CAN send spy probes
+  Alliance
+  	Stars can be routed through stars owned by another player
+  	Cannot send spy probes
+  	Other player can see all the information about your stars and fleets
+Replay a period of the game in the applet
+
+CLEANUP
+Make the battle logic easier to understand
+Purchase*Events are similar, should have a common base class
+Are all Events invalid on dead stars?
+
+BUGS
+Add a Game.name field
+Rename newGame.psp to newMatch.psp
+GamePage should check that the playerId and password are valid for the game. Right now it just checks that they are non-empty
+Applet doesn't work on OSX
+	no LiveConnect
+Applet background is White when rendered in Apple Safari
+	Have added a fix for this in NovaApplet.paint(). not sure if it is working
+APIs should take star IDs not star names
+	did this for the dispatch.py dispatch methods, they take a String or an Id. Need to update the console.psp
+	Dispatch and Purchase should select star based on ID not name
+		Likewise for nova.api methods
+Fleets should be drawn on top of everything
+	numFactories seems to show through
+Purchasing doesn't always come out to the exact expected number
+Deployment screen should only show reachable stars
+Applet player colors may change if they start a new browser
+	Can do this with the cookie mechanism used to save the transformation settings
+Should refresh a to-be-aborted event from the database before checking its Status
+
+TEST
+After last production, no 'Next production in' link shows up
+
+COMPLETED
+Separate user and player login
+	user login is for non-match related actions, such as newGame.psp
+build.xml#install needs to work when the DB has no password (should not pass -p argument to install script)
+Default range should be 15
+SQL error with "Hind's Crimson Star" (quote-related I'm sure)
+	removed ' characters from starNames.xml
+Need to add fleet.serialNum so that console.psp cancel will work
+Complete XMLRPC API
+	Move Webui to use XMLRPC API
+Should rename Player.wealth to Player.cash
+	This is done through the api beans
+Blocked probes and nova bombs are not reported to the target player
+Nova bombs may be shown twice in the News Wire
+Collapsable Status and Fleets sections
+Made left hand table wider so that routed fleets don't take up too much vertical space
+Purchase page should show player cash
+Star names in deployment orders should be sorted
+Change Next Production to be a countdown (in hours)
+Deployment orders can target any star, not just owned stars
+Distances shown in the applet don't match actual distances exactly
+Subtracting money and performing the game action is not transactional
+	Make subtracting the money come last so that in the worst case, the player
+	gets an error in his favor
+Number of ships in transit does not include scheduled departures
+Show final destination for a routed fleet
+Enable a routed fleet to be aborted
+Applet should preserve translation and zoom settings
+UI for configuring communication/alerts
+  Should be able to independently configure the 'triggers' and the 'medium'
+  Triggers could be classes or functions found in a particular package
+  The media are things like ICQ Pager, e-mail, etc
+  Basically, want to be able to say things like:
+    Alert by ICQ Pager immediately when one of my stars is attacked
+	 Send daily e-mail which lists the stars that I have lost/gained
+Standing orders
+  Can be used to automatically send new production to a particular star on the map
+Communication/Alerts preferences
+  Will need a real framework for this
+Routing instructions
+  Automatically applied when ships arrive at a star
+ProductionEvent should refer back to GlobalProductionEvent so that the News Wire entry for production
+  is always accurate
+Speed should be more expensive
+  Maybe about $200 to double your initial speed?
+  Is speed even an important part of the game?
+Focus on a star
+  Based on a user action on the web page, the applet pans to and highlights a particular star 	
+  For example, you should be able to click on the name of a star in the News Wire, and the applet should
+  	show you where that star is
+UI should show when the next Production is going to occur
+Game should not allow you to send a fleet that will arrive after the game is over
+A Nova Bomb which is blocked by a shield should not be visible to all players
+Events which require purchasing should consider the pending cost of spy probes and death probes
+Fleets can be scheduled to go farther than they are capable of going
+	DepartureEvent validation is not run for departures scheduled in the future
+		(with a delay)
+Fleets can be scheduled to leave a star in quantities exceeding the number of ships available
+  However the fleets will not actually be able to leave
+The UI shows the ships as being both part of the fleet, and part of the star's garrison
+Figure out some nice formatting for dates and times. Showing 1/100s of a second right now
+  WebKit has a formatter you can plug in
+  This should simply be the name of a function that will format the values. By default it is 'str',
+    it can be implemented to do something better for floating point numbers and dates
+  See query.py#_formatMySQLDate
+  format strings are according to the Python 'time' module
+'Abort' feature for departure events
+  Can implement this by:
+    Having a 'delay by' field in the dispatch window
+	 In place of the 'Time left' field in the Fleets table, show an 'Abort' button
+	 'Abort' changes the state of the DepartureEvent to 'Aborted'
+	 Must check that the DepartureEvent status is still Pending before doing this, 
+	 otherwise it is too late
+'Purchase' window is cluttered looking
+  I think there should be a separate table row for each item you can purchase, with separate
+    forms and separate validation
+Need to implement purchase events for nova shield and probe jammer
+  Need new objects in the schema
+Can make probe jammers and nova shields cost different amounts than the probe and the nova bomb
+  Just need to add 'cost' attributes to the Game
+Need to keep web users from being able to save the source code
+	  disable directory listing in .htaccess
+Field validation for required fields and data types ( integers )
+Ensure that playerName and User.name are unique to their contexts
+  Should add some MySQL indexes and constraints to the schema
+  see http://www.mysql.com/documentation/mysql/bychapter/manual_Reference.html#CREATE_INDEX
+Should also add some indexes for common queries
+  Star.gameId
+  Star.ownerId
+  ArrivalEvent, SpyProbeEvent, DeathProbeEvent, FieryDeathEvent, BattleEvent, DepartureEvent by playerId

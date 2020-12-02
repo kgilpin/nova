@@ -1,0 +1,10 @@
+
+Required server Aliases:
+/nova-maps/ : nova/maps
+			  used to populate the list of maps in newGame.psp
+
+/nova-lib/	: nova/build
+			  used in the URL of the APPLET archive tag
+
+Run install.py -u user [ -p password ] --url novaRootURL
+	 Creates python/nova/engine/DB.config and python/test/Test.config

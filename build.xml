@@ -1,0 +1,262 @@
+<project name="nova" default="dist" basedir=".">
+
+   <property name="build" value="build" />
+   <property name="classes" value="${build}/classes" />
+
+	<!-- 
+	Should define a single property 'computername', which will be
+	used to then read ${computername}.properties 
+	-->
+	<property file="computername.properties" />
+
+   <!-- 
+   Defined in this file :
+   
+   jdk118.dir	: JDK 1.1.8 SDK
+   webware08	: Python Webware 0.8
+   log4py		: log4py version 1.1
+   xmlrpclib	: XMLRPC 1.0.1
+   pil112		: Python Image Library version 1.1.2
+   mxDateTime	: mxDateTime library
+   python2		: command to be used to run Python 2.1 (2.2 is sort of OK too)
+   nova.baseurl		: base URL of the nova application in the local webserver
+   smtp.host	: SMTP mail host
+   db.user, db.password, db.database : MySQL user, password, and database name
+   
+   Python packages need not be defined if they are installed into Python itself
+   MySQLDB is also required
+   -->
+   <property file="${computername}.properties" />
+
+	<path id="python.path">
+		<pathelement location="${basedir}" />
+		<pathelement location="${basedir}/python" />
+		<pathelement location="${webware08}" />
+		<pathelement location="${log4py}" />
+		<pathelement location="${mxDateTime}" />
+		<pathelement location="${xmlrpclib}" />
+		<pathelement location="${mySQLPython}" />
+		<pathelement location="${pil112}/PIL" />
+		<pathelement location="${pil112}/DLLs" />
+	</path>
+	<property name="python.path.prop" refid="python.path" />
+
+   <path id="class.path">
+	  <fileset dir="lib" includes="*.jar" />
+   </path>
+
+   <target name="init">
+		<mkdir dir="${classes}"/>
+		<mkdir dir="java/nova/beans" />
+
+		<available property="boot.class.path.property" value="${jdk118.dir}/lib/classes.zip" file="${jdk118.dir}/lib/classes.zip" />
+   </target>
+
+	<target name="compile11" if="boot.class.path.property">
+	  <javac classpathref="class.path" 
+		compiler="javac1.1" debug="true" srcdir="java" includes="nova/applet/*.java" destdir="${classes}">
+		<compilerarg line="-bootclasspath ${boot.class.path.property}" />
+	  </javac>
+	</target>
+
+	<target name="compile12" unless="boot.class.path.property">
+	  <javac classpathref="class.path" 
+		compiler="javac1.1" debug="true" srcdir="java" includes="nova/applet/*.java" destdir="${classes}">
+	  </javac>
+	</target>
+
+   <target name="compile" depends="init,compile11,compile12">
+   </target>
+
+	<target name="mkpatch">
+		<copy todir="${webware08}/MiddleKit/Design">
+			<fileset dir="python/mk" includes="Generate.py,JavaGenerator.py,PythonGenerator.py,ValueObjectGenerator.py" />
+		</copy>
+		<copy todir="${webware08}/MiddleKit/Run">
+			<fileset dir="python/mk" includes="SQLObjectStore.py" />
+		</copy>
+	</target>
+
+	<target name="mkgenerate" depends="init,mkpatch">
+		<exec failifexecutionfails="yes" failonerror="yes" dir="python/nova" executable="${python2}">
+			<arg line="${webware08}/MiddleKit/Design/Generate.py --py --sql --db MySQL --model Nova" />
+		</exec>
+		<!--
+		<exec failifexecutionfails="yes" failonerror="yes" dir="python/nova" executable="${python2}">
+			<arg line="${webware08}/MiddleKit/Design/Generate.py - -java - -db MySQL - -model Nova - -outdir ${basedir}/java" />
+		</exec>
+		-->
+	</target>
+
+	<target name="loaddb">
+		<exec failifexecutionfails="yes" failonerror="yes" dir="python/nova" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source GeneratedSQL/Create.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+	</target>
+
+	<!-- DB indexes -->	
+	<target name="db-indexes">
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source sql/indexes.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+	</target>
+		
+	<!-- Second round of DB updates -->	
+	<target name="updatedb-2">
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source sql/update-1.0.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+		<exec executable="${python2}" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="update-1.py" />
+		</exec>	
+	</target>
+
+	<!-- 
+	Third round of DB updates:
+	Triggers 
+	-->	
+	<target name="updatedb-3">
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source sql/update-1.1.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+	</target>
+
+	<!-- 
+	Fourth round of DB updates : 
+	Added Game.name
+	-->	
+	<target name="updatedb-4">
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source sql/update-1.2.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+	</target>
+	
+	
+	<target name="dball" depends="loaddb,db-indexes,updatedb-2,updatedb-3">	
+	</target>	   
+		   
+	<target name="db-backup">
+		<exec failifexecutionfails="no" executable="mysqldump" outputproperty="mysqldump.output">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="-c -l -n -t" />
+			<arg line="${db.database} " />
+		</exec>
+		
+		<echo file="${backup.file}" message="${mysqldump.output}" />
+	</target>
+
+	<target name="db-restore">
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source ${backup.file}'" />
+			<arg line="${db.database} " />
+		</exec>
+	</target>
+
+   <target name="jar" depends="compile">
+	  <unjar dest="${classes}">
+		 <fileset dir="lib" includes="*.jar" />
+	  </unjar>
+	  <jar jarfile="${build}/nova-applet.jar" basedir="${classes}" excludes="nova/beans" />
+   </target>
+
+	<target name="install">
+		<condition property="install.db.password" value="-p ${db.password}">
+			<isset property="db.password"/>
+		</condition>
+		<property name="install.db.password" value="" />
+	
+		<exec executable="${python2}" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="install.py -u ${db.user} ${install.db.password} -s ${smtp.host} --url=${nova.baseurl}" />
+		</exec>	
+	</target>
+	
+   <target name="dist" depends="mkgenerate,jar,loaddb,install">
+	  <mkdir dir="python/nova/webui/lib" />
+	  <copy todir="python/nova/webui/lib" file="${build}/nova-applet.jar" />
+	  <copy todir="test/html" file="${build}/nova-applet.jar" />
+   </target>
+	
+	<target name="test" depends="init">
+		<pathconvert property="tests.path.prop" dirsep="/" pathsep=",">
+			<path>
+				<fileset dir="python/test" includes="**/test*.py" />
+			</path>
+		</pathconvert>
+		<exec executable="${python2}" dir="python" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="test/run.py -t ${tests.path.prop}" />
+		</exec>
+	</target>
+
+	<target name="system-test">
+		<antcall target="run-system-test">
+			<param name="system.test.name" value="systemRouting.py" />
+		</antcall>
+		<antcall target="run-system-test">
+			<param name="system.test.name" value="systemDeployment.py" />
+		</antcall>
+		<antcall target="run-system-test">
+			<param name="system.test.name" value="systemSnapshot.py" />
+		</antcall>
+	</target>
+	
+	<target name="run-system-test" depends="dball">	
+		<exec failifexecutionfails="no" executable="mysql">
+			<arg line="--user=${db.user} --password=${db.password}" />
+			<arg line="--execute='source test/data/game.sql'" />
+			<arg line="${db.database} " />
+		</exec>
+
+		<exec executable="${python2}" dir="python" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="test/run.py -t test/${system.test.name}" />
+		</exec>		
+	</target>
+	
+	<target name="one-test">
+		<property name="test.args" value="" />
+		<exec executable="${python2}" dir="python" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="test/${test.name} ${test.args}" />
+		</exec>
+	</target>
+	
+	<target name="tick" description="Runs one engine 'tick', processing pending events and actions">
+		<exec executable="${python2}" dir="python" failifexecutionfails="yes" failonerror="yes">
+			<env key="PYTHONPATH" value="${python.path.prop}" />
+			<arg line="nova/engine/Engine.py" />
+		</exec>
+	</target>
+	
+	<target name="clean-pyc">
+		<delete>
+			<fileset dir="." includes="**/*.pyc" />
+		</delete>
+	</target>
+
+   <target name="clean" depends="clean-pyc">
+	  <delete dir="${build}" />
+	  <delete file="engine.log" />
+	  <delete file="python/test/Test.config" />
+	  <delete file="python/nova/engine/DB.config" />
+	  <delete dir="python/nova/webui/lib" />
+	  <delete dir="python/nova/GeneratedPy" />
+	  <delete dir="python/nova/GeneratedSQL" />
+	  <delete>
+		 <fileset dir="test/html" includes="*.jar" />
+	  </delete>
+   </target>
+</project>

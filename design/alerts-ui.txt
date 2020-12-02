@@ -1,0 +1,18 @@
+
+Configure Alerts
+
+o Battle Alert [ enabled: y/n ]
+
+api:
+
+alerts.py:
+
+def isBattleAlertEnabled(player):
+	# See if there is a TriggerInstance whose definition is TriggerDefinition.battleMessageTrigger
+	
+def enableBattleAlert(player):
+	if not isBattleAlertEnabled(player):
+		# Create a new TriggerInstance whose definition is TriggerDefinition.battleMessageTrigger
+		
+def disableBattleAlert(player):
+	# Remove the TriggerInstance...

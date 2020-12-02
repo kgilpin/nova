@@ -1,0 +1,44 @@
+<%@ page imports = "sys,os,time,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+<%
+from nova.Star import Star
+from nova.engine import find
+
+if not self.login(): return
+
+mkPlayer = self.player()
+
+enabled = find.isBattleNotificationEnabled(mkPlayer)
+%>
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+</head>
+<body>
+
+<center>
+
+<%@ include file="printMessageOrError.psp" %>
+
+<form action="NotificationsAction.py" method="POST">
+
+<table border="0">
+<tr>
+<td align="right"><input name="enable" type="checkbox" <% if enabled: { %>checked<% } %> ></td>
+<td align="left">Notify my by e-mail when battles occur</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<input name="_action_battle" type="submit" value="Update" />
+</td>
+</tr>
+</table>
+</form>
+
+<hr>
+
+<a href="console.psp">Back</a>
+</center>
+</body>

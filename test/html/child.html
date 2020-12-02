@@ -1,0 +1,14 @@
+<script>
+// window.onunload = unLoad;
+
+function unLoad() {
+	alert('unload');
+	// window.opener.location.replace('applet-1.html?rn=' + Math.random())
+	window.opener.location.reload(true);
+	window.close();
+}
+</script>
+
+Child Window
+
+<a href="javascript:unLoad()">Close</a>

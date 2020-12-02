@@ -1,0 +1,70 @@
+<%@ page imports = "sys,os,time,nova.webui.NovaPage:NovaPage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="NovaPage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+<%
+if not self.login('newGame.psp'): return
+%>
+
+<head>
+	<title>Create New Match</title>
+
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+</head>
+
+<body>
+
+<center>
+	<h1>Create New Match</h1>
+</center>
+
+<%
+from nova.User import User
+
+users = self.store().fetchObjectsOfClass(User)
+%>
+
+Create a match with the following users:
+<form action="NewGameAction.py" method="POST">
+
+<table>
+<% for user in users: { 
+	if user.name() != 'Nobody': {%>
+<tr><td><input name="users" type="checkbox" value="<%= user.serialNum() %>"/></td><td><a href="mailto:<%= user.email() %>" /><%= user.name() %></a></td></tr>
+<% 
+	}
+} %>
+</table>
+
+Select a Map:
+<table border="1">
+<%
+import os
+
+files = os.listdir(self.mapDir())
+files = [ file for file in files if file.endswith('.bmp') ]
+for file in files: {
+%>
+<tr><td><input type="radio" name="map" <% if file is files[0]: { %>checked<% } %> onMouseDown="document.images['map'].src='maps/<%= file %>'" value="<%= file %>" /><%= file %></td>
+<%
+if file is files[0]: {
+%>
+<td rowspan="<%= len(files) %>">Preview:<br>
+<img name="map" align="right" width="400" height="400" src="maps/<%= file %>" /></td>
+<%
+}
+%>
+</tr>
+<% } %>
+</table>
+<br>
+Time Compression ( 0...1000 ) <input name="timeCompression" type="text" value="1" />
+<br>
+
+<input name="_action_newGame" type="SUBMIT" value="Go!" />
+
+</form>
+
+</body>

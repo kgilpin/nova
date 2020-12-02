@@ -1,0 +1,68 @@
+<%@ page imports = "sys,os,time,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.	 Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+<%
+from nova.Star import Star, sortByName
+from nova.api import query
+
+if not self.login(): return
+
+mkPlayer = self.player()
+
+snapshot = query.getSnapshot(mkPlayer, eventLimit = 0)
+game = snapshot.game()
+client = snapshot.clientPlayer()
+
+ownedStars = snapshot.getOwnedLiveStars()
+stars = snapshot.stars()
+
+stars.sort(sortByName)
+ownedStars.sort(sortByName)
+orders = query.getDeploymentOrders(mkPlayer, snapshot)
+%>
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+</head>
+<body>
+
+<center>
+
+<%@ include file="printMessageOrError.psp" %>
+
+<form action="DeploymentOrdersAction.py" method="POST">
+
+<table border="1">
+<tr>
+<th>From Star</th><th>Deploy To</th><th>Leave Garrison</th>
+</tr>
+<% for origin in ownedStars: { %>
+<tr>
+<td><%= origin.name() %></td>
+
+<td>
+<select name="destination<%= origin.id() %>">
+<option <% if not orders.has_key(origin): { %>selected<% } %>>None</option>
+<% for destination in stars: { if origin is destination: { continue } %>
+<option value="<%= destination.id() %>" <% if orders.has_key(origin) and orders[origin][0] == destination: { %>selected<% } %>><%= destination.name() %></option>
+<% } %>
+</select>
+</td>
+
+<td>
+<input type="text" name="garrison<%= origin.id() %>" value="<% if orders.has_key(origin): { %><%= orders[origin][1] %><% } %>" />
+</td>
+</tr>
+<% } %>
+</table>
+
+<input name="_action_orders" type="submit" value="Update" />
+
+</form>
+
+<hr>
+
+<a href="console.psp">Back</a>
+</center>
+</body>

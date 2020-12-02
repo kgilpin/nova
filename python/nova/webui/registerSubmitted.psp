@@ -1,0 +1,25 @@
+<%@ page imports = "sys,os,time,nova.webui.NovaPage:NovaPage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="NovaPage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+
+<head>
+	<title>Registration Submitted</title>
+
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+	<script type="text/JavaScript" src="validate.js"></script>
+</head>
+
+<body>
+
+<center>
+	<h1>Registration Submitted</h1>
+</center>
+
+	Thank you for registering with Nova.
+	<p>
+	Your account is not yet active. You will receive an e-mail from Nova which contains a link. Follow the link
+	to activate your account, and then you can begin to play!
+
+</body>

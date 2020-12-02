@@ -1,0 +1,14 @@
+<%
+if self.request().fields().has_key('message'): {
+%>
+<font size="+1"><%= self.formatEventMessage(self.request().fields()['message']) %></font><br/>
+<%
+}
+%>
+<%
+if self.request().fields().has_key('error'): {
+%>
+<font size="+1"><b>Error : <%= self.formatEventMessage(self.request().fields()['error']) %></b></font><br/>
+<%
+}
+%>

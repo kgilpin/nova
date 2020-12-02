@@ -1,0 +1,23 @@
+
+<FORM name="frmDispatch">
+
+<INPUT type="text" name="gameID" value="12" />
+<INPUT type="text" name="playerName" value="newgame-kevin" />
+<INPUT type="text" name="password" value="kevin" />
+<INPUT type="text" name="origin" value="Corprl" />
+<INPUT type="text" name="destination" />
+<INPUT type="text" name="numShips" value="1" />
+<INPUT type="button" value="dispatchFleet" 
+   onClick = "var result = document.api.dispatchFleet(Number(document.frmDispatch.gameID.value), document.frmDispatch.playerName.value, document.frmDispatch.password.value, document.frmDispatch.origin.value, document.frmDispatch.destination.value, Number(document.frmDispatch.numShips.value)); if ( document.result != null ) document.result.text = result;">
+</FORM>
+
+<INPUT type="button" value="WriteText" onClick="document.resultTable.text = 'hello'" />
+
+<table name="resultTable">
+<tr name="resultRow" />
+</table>
+
+<APPLET CODE="nova.applet.APIApplet.class" ARCHIVE="nova-applet.jar" WIDTH=100 HEIGHT=100 VSPACE=10 HSPACE=10 NAME="api">
+</APPLET>
+
+<INPUT type="button" value="Dispatch" onClick="alert('hi');window.open('/nova/dispatch.psp?gameId=12','Dispatch','toolbar=no,width=400,height=300,status=no,scrollbars=no,resizable=yes,location=no,menubar=no,screenX=100,screenY=100,left=100,top=100');return false" target="_command">

@@ -1,0 +1,54 @@
+<%@ page imports = "sys,os,time,nova.webui.GamePage:GamePage"%> <%-- Here's the modules that I need in this file --%>
+<%@ page extends="GamePage"%> <%--This is the base class for this page.  Page is the default --%>
+<%@ page isInstanceSafe="yes" %> <%-- each instance of this class can be used multiple times --%>
+<%@ page indentType="braces" %> <%-- use tabs to indent the sourcefile that this template will produce --%>
+<%
+from nova.Star import Star
+from nova.engine import find
+
+if not self.login(): return
+
+player = self.player()
+
+toPlayer = self.request().field('toPlayer', None)
+otherPlayers = find.getOtherPlayers(player)
+%>
+<head>
+	<link rel="StyleSheet" href="styleNN.css" type="text/css">
+	<style type="text/css">@import url("style.css");</style>
+</head>
+<body>
+
+<%@ include file="printMessageOrError.psp" %>
+
+<form action="MailAction.py" method="POST">
+
+<table border="0">
+<tr>
+<td align="right">To Player</td>
+<td align="left"><div align="left">
+		<select name="toPlayer">
+			<%
+for player in otherPlayers: {
+%>
+			<option <% if player.name() == toPlayer: { %>selected<% } %> ><%= player.name() %></option>
+			<% } %>
+		</select>
+</div></td>
+</tr>
+<tr>
+<td align="right">Message</td>
+<td><div align="left">
+		<textarea cols="80" rows="10" wrap="hard" name="message"></textarea>
+</div></td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<input name="_action_sendmail" type="submit" value="Send Mail" />
+</td>
+</tr>
+</table>
+
+
+</form>
+</body>

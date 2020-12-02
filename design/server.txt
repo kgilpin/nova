@@ -1,0 +1,338 @@
+
+Client Beans
+============
+
+Player:
+  string name
+  long   color
+
+OwnPlayer(Player):
+  int wealth
+  int battlePower
+  float range
+  float speed
+
+Star:
+  int x
+  int y
+  int wealth
+  int numShips
+  int numFactories
+  bool hasSpyShield
+  bool hasDeathShield
+  string name
+  Player owner
+  list(StandingOrder) standingOrders
+
+EnemyStar(Star):
+  datetime lastSpyTime
+
+StandingOrder:
+  Star star
+
+Garrison(StandingOrder):
+  int numShips
+
+Routing(StandingOrder):
+  Star  destination
+  int   numShips
+  
+
+Client Events
+=============
+
+event:
+	Player player
+  datetime eventTime
+
+purchase:
+  int    cost
+
+buy-factories(purchase):
+  string star
+  int    numFactories
+
+	event.star().setNumFactories( event.star().numFactories() + event.numFactories() )
+
+buy-speed(purchase):
+  float  delta
+
+	event.player().setSpeed( player.speed() + self.delta() )
+
+buy-range(purchase):
+  float  delta
+	player.setRange( player.range() + self.delta() )
+
+buy-battle-power(purchase):
+  float  delta
+	player.setBattlePower( player.battlePower() + self.delta() )
+
+create-routing:
+  Star origin
+  Star destination
+  int    garrison
+	routing = Routing( destination, garrison )
+	origin.setRouting(routing)
+
+remove-routing:
+  string origin
+	origin.setRouting( None )
+
+battle:
+  Star star
+  Player attacker
+  Player defender
+  Player victor
+
+	changed = star.owner() is not victor;
+	if changed:
+		star.setOwner( victor )
+		star.setRouting( None )
+		star.setNumShips( self.numAttackingShips() - self.numShipsLost() )
+	else:
+		star.setNumShips( self.numDefendingShips() - self.numShipsLost() )
+
+own-battle(battle):
+  int attackingShips
+  int defendingShips
+  int shipsLost
+
+production:
+  string star
+  int    numShips
+
+	star.setNumShips( star.numShips() + event.numShips() )
+
+ship-schedule-departure:
+  Player   owner
+  string   origin
+  string   destination
+  int      numShips
+  datetime departureTime
+  datetime arrivalTime
+
+# TODO: Make the bean for this
+ship-departure:
+  ship-schedule-departure schedule
+
+	schedule.origin().setNumShips( schedule.origin().numShips() - schedule.numShips() )
+
+ship-arrival:
+  Star origin
+  Star destination
+  int    numShips
+
+def execute():
+  if destination.owner() is player:
+    destination.setNumShips( destination.numShips() - numShips )
+  else:
+    doBattle()
+
+def doBattle():
+  event = AttackEvent()
+  event.setAttacker( player )
+  event.setDefender( destination.owner() )
+  event.setNumAttackingShips( numShips )
+  event.setNumDefendingShips( destination.numShips() )
+
+  attackPower = player.battlePower()
+  defendPower = destination.owner().battlePower()
+  attackerShipsLost = 0
+  defenderShipsLost = 0
+  while destination.numShips() > 0 and numShips > 0:
+    # TODO: apply some magic formula to compute the outcome of the battle
+  if numShips() == 0:
+    event.setVictor( destination.owner() )
+    event.setNumShipsLost( destination.numShips() - defenderShipsLost )
+  else:
+    event.setVictor( player )
+    event.setNumShipsLost( numShips - attackerShipsLost )
+
+spy-probe
+  string star
+  int    numShips
+  int    numFactories
+  bool   hasSpyShield
+  bool   hasDeathShield
+
+	if star.owner() is not player and star.hasSpyShield():
+		event.setHasSpyShield(1)
+	else:
+		event.setHasSpyShield(0)
+		event.setHasDeathShield( star.hasDeathShield() )
+		event.setNumShips( star.numShips() )
+		event.setNumFactories( star.numFactories() )
+
+death-probe:
+  string star
+  bool   hasDeathShield
+
+	event.setHasDeathShield( star.hasDeathShield() )
+	if not star.hasDeathShield():
+		star.setIsDead(1);
+
+fiery-death:
+  string origin
+  string destination
+  int    numShips
+
+Commands
+========
+
+Command
+-------
+name
+priority
+completed
+executionTime
+execute()
+
+class Engine:
+  def tick():
+    lockTable("Game")
+
+    game = store.fetchObjectsOfClass(Game)[0]
+    game.setLastActionTime(DateTime.now())
+
+    eventCounter = game.eventCounter()
+    
+    # Fetch all events which should be executed, grabbing the earliest ones first
+    events = store.fetchObjectsOfClass(Event, clauses="WHERE status = 'Pending' and executionTime < NOW() ORDER BY executionTime ASC, eventId ASC")
+
+    # So we can see which ones are being executed
+    for event in events:
+      event.setStatus('InProcess')
+    store.saveChanges()
+
+    for event in events:
+      try:
+        event.execute()
+        
+        if event.deleteMe():
+          store.delete(event)
+      except:
+        import traceback
+        # TODO: log this
+        traceback.print_exc()
+      finally:
+        event.setCounter( eventCounter )
+        event.setStatus( 'Complete' )
+        eventCounter += 1
+
+    game.setEventCounter(eventCounter)
+    store.saveChanges()
+
+    unlockTable("Game")
+
+class AbstractAction:
+  def getEvents(self):
+    return self._events
+
+  def addEvent(self, event):
+    self._events.append(event)
+
+from mx.DateTime import TimeDelta
+
+class DispatchAction(AbstractAction):
+  def __init__(self, numShips, origin, destination, owner, unitType):
+    self.setNumShips( numShips )
+    self.setOrigin( origin )
+    self.setDestination( destination )
+    self.setOwner( owner )
+    self.setUnitType( unitType )
+    self.setDepartureTime(DateTime.now() + 5 minutes)
+  
+  def execute(self):
+    self.origin().subtractShips(self.numShips())
+
+	schedule = ScheduleDepartureEvent( DateTime.now() )
+    schedule.setNumShips( numShips )
+    schedule.setOrigin( origin )
+    schedule.setDestination( destination )
+    schedule.setOwner( owner )
+    schedule.setUnitType( unitType )
+    schedule.setDepartureTime( departureTime )
+    schedule.setArrivalTime( self.departureTime() + self.travelTime())
+
+    departure = DepartureEvent( schedule )
+
+    arrival = ArrivalEvent( departure.arrivalTime() )
+    arrival.setDepartureEvent( departure )
+    
+    addEvent(schedule)
+    addEvent(departure)
+    addEvent(arrival)
+
+  def travelTime(self):
+    travelTimeInHours = self.origin().distanceTo(self.destination()) / self.owner().speedV()
+    return DateTime.now() + TimeDelta(travelTimeInHours)
+
+class ArrivalEvent:
+  def execute(self):
+    self.action = self.getAction()
+    apply(getattr(self, "process%sArrival" % action.getUnitType()), ())
+
+  def processShipArrival(self):
+    if self.action.owner() is self.action.destination.owner():
+      self.action.destination().addShips(self.action.numShips())
+      doRouting()
+    else:
+      battle()
+
+  def processSpyProbeArrival(self):
+
+  def processDeathProbeArrival(self):
+
+class DispatchFleet():
+  def execute(numShips, unitType):
+    compute arrival time
+
+  def arrivalTime():
+    return currentTime + distance(origin, destination) / player.speed
+
+class DispatchShips(DispatchFleet):
+  def execute():
+    create a new Ship Fleet
+
+class DispatchSpyProbe(DispatchFleet):
+  execute():
+    create a new SpyProbe Fleet
+
+class DispatchDeathProbe(DispatchFleet):
+  execute():
+    create a new DeathProbe Fleet
+
+class PurchaseFactories:
+  def execute():
+    if amount * FACTORY_COST <= player.wealth():
+      star.factories += amount
+      player.wealth -= amount * FACTORY_COST
+
+class ProductionEvent:
+  def execute():
+    for star in stars if not star.isDead():
+      star.numShips += star.numFactories
+      
+class FleetArrivalEvent:
+  priority : ( less than DeathProbeEvent )
+  def execute():
+    if destination.owner == owner:
+      destination.numShips += numShips
+      doRouting()
+    else:
+      battle()
+
+class DeathProbeEvent:
+  def execute():
+    if not destination.hasDeathShield():
+      destination.isDead = 1
+
+spy-shield
+  immediate
+death-shield
+  immediate
+routing
+  immediate
+
+
+
